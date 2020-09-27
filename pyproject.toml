@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "http_requester"
-version = "0.1.1-dev1"
+version = "0.1.1"
 description = ""
 authors = ["Ryan O'Rourke <ryan.orourke@welocalize.com>"]
 
