@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "http_requester"
-version = "1.0.0"
-description = ""
+version = "1.0.3"
+description = "Simple interface for building HTTP API requests."
 authors = ["Ryan O'Rourke <ryan.orourke@welocalize.com>"]
 
 [tool.poetry.dependencies]

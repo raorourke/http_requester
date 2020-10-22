@@ -26,8 +26,7 @@ request_cache = {}
 
 def is_json(data):
     try:
-        json.loads(data)
-        return True
+        return data == json.loads(json.dumps(data))
     except:
         return False
 
@@ -71,10 +70,10 @@ class PreparedRequest:
         } if params else params
 
         def parse_payload(payload: Dict[str, Any]) -> Union[Tuple[Dict[str, Any], None], Tuple[None, Dict[str, Any]]]:
-            data, json = payload, None
-            if is_json(payload):
-                data, json = json, data
-            return data, json
+            data, _json = payload, None
+            if is_json(data):
+                data, _json = _json, data
+            return data, _json
 
         self.data, self.json = parse_payload(payload)
         if self.json is not None:
