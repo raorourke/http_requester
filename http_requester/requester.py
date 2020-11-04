@@ -253,6 +253,9 @@ class Requester:
             auth=self._auth
         )
 
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__)
+
     def build_url(self, *args) -> str:
         if not args:
             return self._base_url
