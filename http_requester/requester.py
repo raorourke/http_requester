@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
 import urllib.parse
 from pathlib import Path
 from typing import Any, Union, Tuple, Optional, Dict, Generator, List
@@ -20,6 +21,7 @@ from .creds import Credentials
 this = Path(__file__)
 
 logger = logging.getLogger(f"logger.{this.stem}")
+CACHE_ENABLED = os.environ.get('HTTP_REQUESTER_CACHE_ENABLED', False)
 
 request_cache = {}
 
@@ -45,7 +47,7 @@ def get_request_url(self):
 class PreparedRequest:
     __slots__ = ['url', 'headers', 'params', 'data', 'json', 'files', 'auth', 'cache_enabled']
 
-    def __init__(self, requester: Requester, cache_enabled: bool = False):
+    def __init__(self, requester: Requester):
         url = requester.url or None
         headers = requester.headers or {}
         if creds := requester.creds:
@@ -55,7 +57,7 @@ class PreparedRequest:
         files = requester.files or None
         auth = requester.auth or None
 
-        self.cache_enabled = cache_enabled
+        self.cache_enabled = CACHE_ENABLED
 
         self.url = url
         self.headers = headers if headers else None
