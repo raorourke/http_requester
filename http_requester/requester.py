@@ -43,9 +43,9 @@ def get_request_url(self):
 
 
 class PreparedRequest:
-    __slots__ = ['url', 'headers', 'params', 'data', 'json', 'files', 'auth']
+    __slots__ = ['url', 'headers', 'params', 'data', 'json', 'files', 'auth', 'cache_enabled']
 
-    def __init__(self, requester: Requester):
+    def __init__(self, requester: Requester, cache_enabled: bool = False):
         url = requester.url or None
         headers = requester.headers or {}
         if creds := requester.creds:
@@ -54,6 +54,8 @@ class PreparedRequest:
         payload = requester.payload or None
         files = requester.files or None
         auth = requester.auth or None
+
+        self.cache_enabled = cache_enabled
 
         self.url = url
         self.headers = headers if headers else None
@@ -83,13 +85,17 @@ class PreparedRequest:
             }
         self.files = files
         self.auth = auth
-        self.log_request()
+        if self.cache_enabled:
+            self.log_request()
 
     def __iter__(self) -> Generator[Dict[str, Any], None, None]:
         return (
             {key: attr}
             for key in self.keys()
-            if (attr := getattr(self, key))
+            if (
+                (attr := getattr(self, key))
+                and key != 'cache_enabled'
+            )
         )
 
     def keys(self) -> List[str]:
@@ -114,6 +120,8 @@ class PreparedRequest:
         return self.url
 
     def log_request(self):
+        if not self.cache_enabled:
+            return
         logger.debug(f"PreparedRequest: {self.query_url}")
         for info in self:
             for key, value in info.items():

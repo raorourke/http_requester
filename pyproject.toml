@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "http_requester"
-version = "1.0.4"
+version = "1.0.6"
 description = "Simple interface for building HTTP API requests."
 authors = ["Ryan O'Rourke <ryan.orourke@welocalize.com>"]
 
@@ -9,7 +9,7 @@ python = "^3.8"
 asyncio = "^3.4.3"
 aiohttp = "^3.6.2"
 nest_asyncio = "^1.4.0"
-requests = "^2.24.0"
+requests = "^2.26.0"
 pydantic = "^1.6.1"
 yarl = "^1.6.0"
 
