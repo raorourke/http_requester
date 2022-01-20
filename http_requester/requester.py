@@ -189,16 +189,16 @@ class Requester:
             headers: Optional[dict] = None,
             creds: Optional[Credentials] = None,
             auth: Optional[Tuple[str, str]] = None,
-            history: dict = None,
+            history: dict = None
     ):
 
         headers = headers or {}
-        history = history or {}
+        history = history
         self._base_url = base_url
         self._headers = headers
         self._auth = auth
         self._creds = creds
-        self._history = history or request_cache
+        self._history = history
         self._params = {}
         self._payload = {}
         self._files = {}
@@ -348,7 +348,7 @@ class Requester:
         return self._history
 
     def get_history(self) -> Union[Dict[PreparedRequest, HttpResponse], None]:
-        if CACHE_ENABLED:
+        if CACHE_ENABLED and self._history is not None:
             return self._history.get(self._request)
 
     @property
