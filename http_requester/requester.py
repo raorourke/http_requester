@@ -348,7 +348,8 @@ class Requester:
         return self._history
 
     def get_history(self) -> Union[Dict[PreparedRequest, HttpResponse], None]:
-        return self._history.get(self._request)
+        if CACHE_ENABLED:
+            return self._history.get(self._request)
 
     @property
     def response(self) -> HttpResponse:
