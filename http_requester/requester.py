@@ -410,7 +410,7 @@ class Requester:
                 reason=response.reason,
                 request=response.request
             )
-        if method == 'GET':
+        if method == 'GET' and self._history is not None:
             self._history[request] = self._response
         return self
 
@@ -448,6 +448,6 @@ class Requester:
             )
             logger.debug(f"response={_response}")
             self._response = _response
-            if method == 'GET':
+            if method == 'GET' and self._history is not None:
                 self._history[request] = _response
         return self
