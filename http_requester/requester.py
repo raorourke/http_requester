@@ -20,7 +20,7 @@ from .creds import Credentials
 
 this = Path(__file__)
 
-logger = logging.getLogger(f"logger.{this.stem}")
+logging.basicConfig(level=os.environ.get('LOGLEVEL', 'INFO'))
 CACHE_ENABLED = os.environ.get('HTTP_REQUESTER_CACHE_ENABLED', False)
 
 request_cache = {}
@@ -124,10 +124,10 @@ class PreparedRequest:
     def log_request(self):
         if not self.cache_enabled:
             return
-        logger.debug(f"PreparedRequest: {self.query_url}")
+        logging.debug(f"PreparedRequest: {self.query_url}")
         for info in self:
             for key, value in info.items():
-                logger.debug(f"{key}: {value}")
+                logging.debug(f"{key}: {value}")
 
 
 class HttpConfig(BaseModel):
@@ -395,9 +395,8 @@ class Requester:
             reason=response.reason,
             request=response.request
         )
-        logger.debug(f"response={self._response}")
         if self.status == 401 and self._creds.expired:
-            logger.error(f"Error [{self.status}] {self.reason} - {self.text}")
+            logging.error(f"Error [{self.status}] {self.reason} - {self.text}")
             self._creds.refresh()
             request = self._prepare_request()
             response = self.get_history() or requests.request(
@@ -446,7 +445,6 @@ class Requester:
                 status=response.status,
                 request=HttpRequest(response._request_info)
             )
-            logger.debug(f"response={_response}")
             self._response = _response
             if method == 'GET' and self._history is not None:
                 self._history[request] = _response
